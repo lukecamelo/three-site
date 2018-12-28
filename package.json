@@ -1,0 +1,14 @@
+{
+  "name": "three-site",
+  "version": "1.0.0",
+  "description": "Three.js toy site.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Luke Camelo",
+  "license": "ISC",
+  "dependencies": {
+    "three": "^0.99.0"
+  }
+}
