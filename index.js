@@ -39,7 +39,7 @@ function init() {
 
   // attaching mouse coordinate getter and window resizer
   document.addEventListener('mousemove', onDocumentMouseMove, false)
-  document.addEventListener('resize', onResize, false)
+  window.addEventListener('resize', onResize, false)
   renderer.render(scene, camera)
 }
 
@@ -68,23 +68,14 @@ function addCube() {
   cube.position.x = -0.5
   cube.position.y = 0.5
   scene.add(cube)
-
-  console.log(scene)
-  // console.log(cube)
 }
 
 function render() {
-  // console.log(mouse)
   raycaster.setFromCamera(mouse, camera)
   let intersects = raycaster.intersectObjects(scene.children, true)
-  // for (var i = 0; i < intersects.length; i++) {
-  //   console.log(intersects[i].object)
-  //   intersects[i].object.material.color.set(0xff0000)
-  // }
 
   if (intersects.length > 0) {
     if (INTERSECTED != intersects[0].object) {
-      console.log('INTERSECTED: ', INTERSECTED)
       if (INTERSECTED) {
         INTERSECTED.material.color.setHex(INTERSECTED.currentHex)
       }
