@@ -74,6 +74,11 @@ function render() {
   raycaster.setFromCamera(mouse, camera)
   let intersects = raycaster.intersectObjects(scene.children, true)
 
+  for (let i = 0; i < intersects.length; i++) {
+    intersects[i].object.rotation.x += 0.01
+    intersects[i].object.rotation.y += 0.01
+  }
+
   if (intersects.length > 0) {
     if (INTERSECTED != intersects[0].object) {
       if (INTERSECTED) {
