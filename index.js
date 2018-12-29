@@ -1,4 +1,4 @@
-let renderer, scene, camera, container, raycaster
+let renderer, scene, camera, container, raycaster, cube
 let mouse = new THREE.Vector2(),
   INTERSECTED
 
@@ -33,7 +33,7 @@ function init() {
   const geometry = new THREE.BoxGeometry(1, 1, 1)
   const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
 
-  const cube = new THREE.Mesh(geometry, material)
+  cube = new THREE.Mesh(geometry, material)
   scene.add(cube)
   console.log(cube)
 
@@ -46,7 +46,7 @@ function init() {
 function onDocumentMouseMove(e) {
   e.preventDefault()
   mouse.x = (e.clientX / window.innerWidth) * 2 - 1
-  mouse.y = (e.clientY / window.innerHeight) * 2 + 1
+  mouse.y = -(e.clientY / window.innerHeight) * 2 + 1
 }
 
 function onResize() {
@@ -57,7 +57,6 @@ function onResize() {
 
 function animate() {
   requestAnimationFrame(animate)
-
   render()
 }
 
@@ -66,13 +65,36 @@ function addCube() {
   const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
 
   const cube = new THREE.Mesh(geometry, material)
+  cube.position.x = -0.5
+  cube.position.y = 0.5
   scene.add(cube)
-  console.log(cube)
+
+  console.log(scene)
+  // console.log(cube)
 }
 
 function render() {
   // console.log(mouse)
   raycaster.setFromCamera(mouse, camera)
   let intersects = raycaster.intersectObjects(scene.children, true)
+  // for (var i = 0; i < intersects.length; i++) {
+  //   console.log(intersects[i].object)
+  //   intersects[i].object.material.color.set(0xff0000)
+  // }
+
+  if (intersects.length > 0) {
+    if (INTERSECTED != intersects[0].object) {
+      console.log('INTERSECTED: ', INTERSECTED)
+      if (INTERSECTED) {
+        INTERSECTED.material.color.setHex(INTERSECTED.currentHex)
+      }
+      INTERSECTED = intersects[0].object
+      INTERSECTED.currentHex = INTERSECTED.material.color.getHex()
+      INTERSECTED.material.color.setHex(0xff0000)
+    }
+  } else {
+    if (INTERSECTED) INTERSECTED.material.color.setHex(INTERSECTED.currentHex)
+    INTERSECTED = null
+  }
   renderer.render(scene, camera)
 }
