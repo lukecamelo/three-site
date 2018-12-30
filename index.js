@@ -4,7 +4,10 @@ let mouse = new THREE.Vector2(),
 
 init()
 animate()
-addCube()
+
+for (let i = 0; i <= 20; i++) {
+  addCube()
+}
 
 function init() {
   container = document.createElement('div')
@@ -17,7 +20,7 @@ function init() {
     0.1, // near
     1000 // far
   )
-  camera.position.set(0, 0, 10)
+  camera.position.set(0, 0, 20)
   camera.lookAt(0, 0, 0)
 
   // scene/render/raycaster init
@@ -26,16 +29,9 @@ function init() {
   raycaster = new THREE.Raycaster()
 
   // appending renderer
+  renderer.setClearColor(0xcccccc)
   renderer.setSize(window.innerWidth, window.innerHeight)
   container.appendChild(renderer.domElement)
-
-  // making a cube
-  const geometry = new THREE.BoxGeometry(1, 1, 1)
-  const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
-
-  cube = new THREE.Mesh(geometry, material)
-  scene.add(cube)
-  console.log(cube)
 
   // attaching mouse coordinate getter and window resizer
   document.addEventListener('mousemove', onDocumentMouseMove, false)
@@ -61,12 +57,22 @@ function animate() {
 }
 
 function addCube() {
-  const geometry = new THREE.BoxGeometry(1, 1, 1)
-  const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
+  const geometry = new THREE.BoxGeometry(3, 1, 1)
+  const material = new THREE.MeshNormalMaterial()
+
+  function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min
+  }
 
   const cube = new THREE.Mesh(geometry, material)
-  cube.position.x = -0.5
-  cube.position.y = 0.5
+  cube.position.x = getRandomInt(-10, 10)
+  cube.position.y = getRandomInt(-10, 10)
+  cube.position.z = getRandomInt(-10, 10)
+
+  cube.rotation.x = getRandomInt(-10, 10)
+  cube.rotation.y = getRandomInt(-10, 10)
+  cube.rotation.z = getRandomInt(-10, 10)
+
   scene.add(cube)
 }
 
@@ -75,21 +81,21 @@ function render() {
   let intersects = raycaster.intersectObjects(scene.children, true)
 
   for (let i = 0; i < intersects.length; i++) {
-    intersects[i].object.rotation.x += 0.01
-    intersects[i].object.rotation.y += 0.01
+    intersects[i].object.rotation.x += 0.05
+    intersects[i].object.rotation.y += 0.05
   }
 
   if (intersects.length > 0) {
     if (INTERSECTED != intersects[0].object) {
       if (INTERSECTED) {
-        INTERSECTED.material.color.setHex(INTERSECTED.currentHex)
+        INTERSECTED.material.wireframe = false
       }
+      // This is the code that happens when the raycaster intersects with an object
       INTERSECTED = intersects[0].object
-      INTERSECTED.currentHex = INTERSECTED.material.color.getHex()
-      INTERSECTED.material.color.setHex(0xff0000)
+      INTERSECTED.material.wireframe = true
     }
   } else {
-    if (INTERSECTED) INTERSECTED.material.color.setHex(INTERSECTED.currentHex)
+    if (INTERSECTED) INTERSECTED.material.wireframe = false
     INTERSECTED = null
   }
   renderer.render(scene, camera)
