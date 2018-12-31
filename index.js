@@ -1,3 +1,7 @@
+const removeButton = document.querySelector('.btn-remove')
+
+removeButton.addEventListener('click', reloadScene)
+
 let renderer, scene, camera, container, raycaster, cube
 let mouse = new THREE.Vector2(),
   INTERSECTED
@@ -76,13 +80,23 @@ function addCube() {
   scene.add(cube)
 }
 
+function reloadScene() {
+  while (scene.children.length > 0) {
+    scene.remove(scene.children[0])
+  }
+  for (let i = 0; i <= 10; i++) {
+    addCube()
+  }
+}
+
 function render() {
   raycaster.setFromCamera(mouse, camera)
   let intersects = raycaster.intersectObjects(scene.children, true)
 
   for (let i = 0; i < intersects.length; i++) {
     intersects[i].object.rotation.x += 0.05
-    intersects[i].object.rotation.y += 0.05
+    intersects[i].object.rotation.y -= 0.05
+    intersects[i].object.rotation.z -= 0.05
   }
 
   if (intersects.length > 0) {
