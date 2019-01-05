@@ -93,6 +93,13 @@ function render() {
   raycaster.setFromCamera(mouse, camera)
   let intersects = raycaster.intersectObjects(scene.children, true)
 
+  // for (let child in scene) {
+  //   // child.position.x += 0.01
+  //   // child.position.y += 0.01
+  //   // child.position.z += 0.01
+  //   console.log(child)
+  // }
+
   for (let i = 0; i < intersects.length; i++) {
     intersects[i].object.rotation.x += 0.05
     intersects[i].object.rotation.y -= 0.05
